@@ -1,3 +1,5 @@
+""" Handles question store service. """
+
 import webapp2
 import logging
 
@@ -13,17 +15,26 @@ from thrift.transport import TIOStreamTransport
 from quizlord import QuestionStore
 from quizlord.ttypes import *
 
+
 class GAEQuestion(db.Model):
+    """Model for persisting question objects."""
     question = db.StringProperty()
     answer = db.StringProperty()
     date = db.DateTimeProperty(auto_now_add=True)
 
+    def __init__(self):
+        pass
+
     @staticmethod
-    def newKey(user_id=None):
+    def new_key(user_id=None):
         return db.Key.from_path('Question', user_id or 'default')
 
 
 class QuestionStoreHandler(QuestionStore.Iface):
+    """Handles question service requests."""
+    def __init__(self):
+        pass
+
     def getQuestions(self):
         rows = db.GqlQuery(
             "SELECT * FROM GAEQuestion ORDER BY date LIMIT 100")
@@ -33,7 +44,7 @@ class QuestionStoreHandler(QuestionStore.Iface):
 
     def addQuestion(self, question):
         logging.info("addQuestion: " + str(question))
-        row = GAEQuestion(parent=GAEQuestion.newKey())
+        row = GAEQuestion(parent=GAEQuestion.new_key())
         row.question = question.question
         row.answer = question.answer
         row.put()
