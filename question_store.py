@@ -18,12 +18,10 @@ from quizlord.ttypes import *
 
 class GAEQuestion(db.Model):
     """Model for persisting question objects."""
+
     question = db.StringProperty()
     answer = db.StringProperty()
     date = db.DateTimeProperty(auto_now_add=True)
-
-    def __init__(self):
-        pass
 
     @staticmethod
     def new_key(user_id=None):
@@ -32,8 +30,6 @@ class GAEQuestion(db.Model):
 
 class QuestionStoreHandler(QuestionStore.Iface):
     """Handles question service requests."""
-    def __init__(self):
-        pass
 
     def getQuestions(self):
         rows = db.GqlQuery(
